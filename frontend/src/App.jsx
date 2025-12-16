@@ -1,10 +1,11 @@
-import './App.css';
+
+import Forms from './component/Forms/index.jsx';
 
 function App() {
   return (
-    <main className="app-shell">
-      
-    </main>
+    <div className="container">
+      <Forms />
+    </div>
   );
 }
 
