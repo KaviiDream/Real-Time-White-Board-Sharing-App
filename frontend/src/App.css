@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap');
+
+.app-shell {
+	min-height: 100vh;
+	display: grid;
+	gap: 2.5rem;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	padding: 4rem clamp(1.5rem, 4vw, 5rem);
+	background: radial-gradient(circle at 20% 20%, #f1f5ff, #e7ecff 35%, #dee7ff 60%, #d4f0ff 80%);
+	font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+}
+
+.hero {
+	align-self: center;
+	max-width: 420px;
+}
+
+.kicker {
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	font-size: 0.8rem;
+	color: #4c5aef;
+	margin-bottom: 0.75rem;
+}
+
+.hero h1 {
+	font-size: clamp(2.5rem, 5vw, 3.75rem);
+	margin-bottom: 1rem;
+	color: #0a1647;
+}
+
+.subhead {
+	color: #3c4265;
+	line-height: 1.7;
+	margin-bottom: 2rem;
+}
+
+.cta-button {
+	background: #0f1ecf;
+	color: #fff;
+	border: none;
+	border-radius: 999px;
+	padding: 0.9rem 1.8rem;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: transform 200ms ease, box-shadow 200ms ease;
+	box-shadow: 0 15px 35px rgba(15, 30, 207, 0.25);
+}
+
+.cta-button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 20px 40px rgba(15, 30, 207, 0.3);
+}
+
+.canvas-preview {
+	position: relative;
+	background: #fff;
+	border-radius: 32px;
+	padding: 2rem;
+	box-shadow: 0 20px 40px rgba(7, 29, 77, 0.07);
+	overflow: hidden;
+}
+
+.grid-overlay {
+	position: absolute;
+	inset: 0;
+	background-image: linear-gradient(rgba(12, 24, 69, 0.08) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(12, 24, 69, 0.08) 1px, transparent 1px);
+	background-size: 32px 32px;
+	mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.85), transparent 70%);
+}
+
+.canvas-preview p {
+	position: relative;
+	font-weight: 600;
+	color: #0a1647;
+	margin: 0;
+}
+
+@media (max-width: 600px) {
+	.app-shell {
+		padding: 3rem 1.25rem;
+	}
+}

@@ -1,0 +1,8 @@
+{
+  "watch": ["vite.config.js", "package.json"],
+  "ext": "js,json,jsx,ts,tsx",
+  "exec": "npx vite --clearScreen false",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
