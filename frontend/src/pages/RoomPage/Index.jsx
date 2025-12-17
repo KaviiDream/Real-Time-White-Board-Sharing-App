@@ -11,12 +11,24 @@ const RoomPage = () => {
     const [tool,setTool]=useState("pencil");
     const [color,setColor]=useState("black");
     const [elements,setElements]=useState([]);
+    const [history,setHistory]=useState([]);
 
     const handleClearCanvas = () =>{
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0,0,canvas.width,canvas.height);
         setElements([]);
+    }
+
+    const undo = () =>{
+        setHistory((prevHistory)=>[...prevHistory, elements[elements.length -1]]);
+        setElements((prevElements)=> prevElements.slice(0, prevElements.length -1));
+    }
+
+    const redo = () =>{
+        const newElements = [...elements, history[history.length -1]];
+        setElements(newElements);
+        setHistory((prevHistory)=> prevHistory.slice(0, prevHistory.length -1));
     }
 
 
@@ -50,8 +62,8 @@ const RoomPage = () => {
                 </div>
 
                 <div className="col-md-3 d-flex gap-2">
-                    <button className="btn btn-primary mt-1">Undo</button>
-                    <button className="btn btn-outline-primary mt-1">Redo</button>
+                    <button className="btn btn-primary mt-1" disabled={elements.length === 0} onClick={()=> undo()}>Undo</button>
+                    <button className="btn btn-outline-primary mt-1" disabled={history.length < 1} onClick={() => redo()}>Redo</button>
 
                 </div>
 
