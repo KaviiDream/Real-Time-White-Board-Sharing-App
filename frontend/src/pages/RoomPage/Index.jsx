@@ -12,6 +12,13 @@ const RoomPage = () => {
     const [color,setColor]=useState("black");
     const [elements,setElements]=useState([]);
 
+    const handleClearCanvas = () =>{
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        setElements([]);
+    }
+
 
   return (
     <div className="row">
@@ -49,7 +56,7 @@ const RoomPage = () => {
                 </div>
 
                 <div className="col-md-2 d-flex gap-2 ml-6">
-                    <button className="btn btn-danger mt-1">Clear Canvas</button>
+                    <button className="btn btn-danger mt-1" onClick={handleClearCanvas}>Clear Canvas</button>
                 </div>
 
             </div>
@@ -59,7 +66,7 @@ const RoomPage = () => {
         <div className="col-md-10 mx-auto mt-4 canvas-box">
             <WhiteBoard canvasRef={canvasRef} ctxRef={ctxRef} 
             elements={elements} setElements={setElements}
-            tool={tool} />
+            color={color} tool={tool} />
         </div>
     </div>
   )

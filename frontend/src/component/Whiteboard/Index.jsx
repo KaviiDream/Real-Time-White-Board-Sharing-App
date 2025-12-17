@@ -10,7 +10,8 @@ const WhiteBoard = ({
     ctxRef,
     elements,
     setElements,
-    tool
+    tool,
+    color
 }) => {
 
 
@@ -23,9 +24,17 @@ const WhiteBoard = ({
     canvas.width = window.innerWidth * 2;
     const ctx = canvas.getContext("2d");
 
+    ctx.strokeStyle = color
+    ctx.lineWidth = 2
+    ctx.lineCap = "round"
+
     ctxRef.current = ctx;
 
   },[]);
+
+  useEffect(()=>{
+    ctxRef.current.strokeStyle = color;
+  },[color]);
 
   useLayoutEffect(()=>{
     const roughCanvas = rough.canvas(canvasRef.current);
@@ -38,17 +47,17 @@ const WhiteBoard = ({
 
         if(elements.type==="rect"){
             roughCanvas.draw(
-            roughGenerator.rectangle(elements.offsetX,elements.offsetY,elements.width,elements.height)
+            roughGenerator.rectangle(elements.offsetX,elements.offsetY,elements.width,elements.height,{stroke: elements.stroke,strokeWidth: 5,roughness:0})
             );
         }
         else if(elements.type==="line"){
             
             roughCanvas.draw(
-            roughGenerator.line(elements.offsetX,elements.offsetY,elements.width,elements.height)
+            roughGenerator.line(elements.offsetX,elements.offsetY,elements.width,elements.height,{stroke: elements.stroke,strokeWidth: 5,roughness:0})
             );
         }
         else if(elements.type==="pencil"){
-            roughCanvas.linearPath(elements.path);
+            roughCanvas.linearPath(elements.path,{stroke: elements.stroke,strokeWidth: 5,roughness:0});
         }
         
     })
@@ -63,7 +72,7 @@ const WhiteBoard = ({
     if(tool === "pencil"){
         setElements((prevElements)=>[
             ...prevElements,
-            {type:"pencil",offsetX,offsetY,path: [[offsetX,offsetY]], stroke:"black"}
+            {type:"pencil",offsetX,offsetY,path: [[offsetX,offsetY]], stroke:color}
         ]);
     }
     else if(tool==="line"){
@@ -75,7 +84,7 @@ const WhiteBoard = ({
             offsetY,
             width: offsetX,
             height: offsetY,
-            stroke: "black"
+            stroke: color
             }
         ])
     }
@@ -83,7 +92,7 @@ const WhiteBoard = ({
     else if(tool === "rect"){
         setElements((prevElements)=>[
             ...prevElements,
-            {type:"rect",offsetX,offsetY,width:0,height:0, stroke:"black"}
+            {type:"rect",offsetX,offsetY,width:0,height:0, stroke:color}
         ]);
     }
     else {
