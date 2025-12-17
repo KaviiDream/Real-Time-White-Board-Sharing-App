@@ -21,15 +21,15 @@ const RoomPage = () => {
                 <div className="d-flex col-md-4 justify-content-between gap-4">
 
                     <div className="d-flex gap-1">
-                        <label for="pencil">Pencil</label>
+                        <label htmlFor="pencil">Pencil</label>
                         <input type='radio' name="tool" value="pencil" id="pencil" checked={tool === "pencil"} onChange={(e)=>setTool(e.target.value)}/>
                     </div>
                     <div className="d-flex gap-1">
-                        <label for="line">Line</label>
+                        <label htmlFor="line">Line</label>
                         <input type='radio' name="tool" value="line" id="line" checked={tool === "line"} onChange={(e)=>setTool(e.target.value)}/>
                     </div>
                     <div className="d-flex gap-1">
-                        <label for="rect">Rectangle</label>
+                        <label htmlFor="rect">Rectangle</label>
                         <input type='radio' name="tool" value="rect" id="rect" checked={tool === "rect"} onChange={(e)=>setTool(e.target.value)}/>
                     </div>
 
@@ -58,7 +58,8 @@ const RoomPage = () => {
 
         <div className="col-md-10 mx-auto mt-4 canvas-box">
             <WhiteBoard canvasRef={canvasRef} ctxRef={ctxRef} 
-            elements={elements} setElements={setElements} />
+            elements={elements} setElements={setElements}
+            tool={tool} />
         </div>
     </div>
   )
