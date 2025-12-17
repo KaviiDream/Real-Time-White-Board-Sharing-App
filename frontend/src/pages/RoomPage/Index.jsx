@@ -1,6 +1,7 @@
 import React from 'react'
 import "./index.css"
 import { useState } from 'react';
+import WhiteBoard from '../../component/Whiteboard/Index';
 
 const RoomPage = () => {
 
@@ -11,8 +12,8 @@ const RoomPage = () => {
   return (
     <div className="row">
         <div className="col-12 col-md-8 offset-md-2 align-items-center justify-content-center d-flex flex-column">
-            <h2 className="text-center mt-4 py-5">Real Time White Board</h2>
-            <div className="col-md-8 mt-4 mb-5 d-flex align-items-center justify-content-around border rounded p-3 canvas-container gap-2 mx-auto">
+            <h2 className="text-center mt-4 pt-4 py-4">Real Time White Board <span className="text-primary">[Users Online : 0]</span></h2>
+            <div className="col-md-9 mt-4 mb-5 d-flex align-items-center justify-content-around border rounded p-3 canvas-container gap-2 mx-auto mb-3">
                 <div className="d-flex col-md-4 justify-content-between gap-4">
 
                     <div className="d-flex gap-1">
@@ -45,11 +46,16 @@ const RoomPage = () => {
 
                 </div>
 
-                <div className="col-md-2">
-                    <button className="btn btn-danger">Clear Canvas</button>
+                <div className="col-md-2 d-flex gap-2 ml-6">
+                    <button className="btn btn-danger mt-1">Clear Canvas</button>
                 </div>
 
             </div>
+
+        </div>
+
+        <div className="col-md-10 mx-auto mt-4 canvas-box">
+            <WhiteBoard />
         </div>
     </div>
   )
