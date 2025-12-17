@@ -18,17 +18,15 @@ const RoomPage = () => {
 
                     <div className="d-flex gap-1">
                         <label for="pencil">Pencil</label>
-                        <input type='radio' name="tool" value="pencil" id="pencil" onChange={(e)=>setTool(e.target.value)}/>
+                        <input type='radio' name="tool" value="pencil" id="pencil" checked={tool === "pencil"} onChange={(e)=>setTool(e.target.value)}/>
                     </div>
                     <div className="d-flex gap-1">
                         <label for="line">Line</label>
-                        <input type='radio' name="tool" value="line" id="line" onChange={(e)=>setTool(e.target.value)}/>
-
+                        <input type='radio' name="tool" value="line" id="line" checked={tool === "line"} onChange={(e)=>setTool(e.target.value)}/>
                     </div>
                     <div className="d-flex gap-1">
                         <label for="rect">Rectangle</label>
-                        <input type='radio' name="tool" value="rect" id="rect" onChange={(e)=>setTool(e.target.value)}/>
-
+                        <input type='radio' name="tool" value="rect" id="rect" checked={tool === "rect"} onChange={(e)=>setTool(e.target.value)}/>
                     </div>
 
                 </div>
