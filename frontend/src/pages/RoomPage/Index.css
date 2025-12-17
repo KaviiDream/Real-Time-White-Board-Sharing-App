@@ -1,3 +1,27 @@
 .canvas-box{
     height: 500px;
 }
+
+.canvas-container {
+    flex-wrap: wrap;
+    row-gap: 1.5rem;
+    column-gap: 1.25rem;
+}
+
+.canvas-container > div {
+    flex: 1 1 220px;
+    display: flex;
+    justify-content: center;
+}
+
+.canvas-container > div > div {
+    width: 100%;
+}
+
+.canvas-container label {
+    margin-bottom: 0;
+}
+
+.canvas-container button {
+    min-width: 120px;
+}

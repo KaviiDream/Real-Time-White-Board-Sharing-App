@@ -40,7 +40,7 @@ const RoomPage = () => {
 
                 <div className="col-md-3 d-flex gap-2">
                     <button className="btn btn-primary mt-1">Undo</button>
-                    <button className="btn btn-outline-primary mt-1">Undo</button>
+                    <button className="btn btn-outline-primary mt-1">Redo</button>
 
                 </div>
 
