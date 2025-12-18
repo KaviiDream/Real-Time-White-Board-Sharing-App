@@ -22,17 +22,24 @@ const socket = io(server, connectionOptions);
 function App() {
 
     const [user,setUser] = useState(null);
+    const [users,setUsers] = useState([]);
 
     useEffect(() => {
         socket.on("userIsJoined", (data) => {
             if(data.success){
                 console.log("User successfully joined the room");
+                //setUsers(data.users);
+                setUsers(data.users);
             }
             else{
                 console.log("Error joining the room");
             }
         });
     },[])
+
+    socket.on("allUsers", (data) => {
+        setUsers(data);
+    });
 
     const uuid = () => {
         let s4 = () => {
@@ -47,7 +54,7 @@ function App() {
     <div className="container">
     <Routes>
       <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser} />} />
-      <Route path="/:roomId" element={<RoomPage user={user} socket={socket} />} />
+      <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users} />} />
     </Routes>
     
     </div>

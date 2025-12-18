@@ -3,7 +3,7 @@ import "./index.css"
 import { useState,useRef } from 'react';
 import WhiteBoard from '../../component/Whiteboard/Index';
 
-const RoomPage = ({user,socket}) => {
+const RoomPage = ({user,socket, users}) => {
 
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
@@ -12,6 +12,7 @@ const RoomPage = ({user,socket}) => {
     const [color,setColor]=useState("black");
     const [elements,setElements]=useState([]);
     const [history,setHistory]=useState([]);
+    const [openedUserTab,setOpenedUserTab]=useState(false);
 
     const handleClearCanvas = () =>{
         const canvas = canvasRef.current;
@@ -34,8 +35,26 @@ const RoomPage = ({user,socket}) => {
 
   return (
     <div className="row">
+        <button type='button' className='btn btn-dark' style={{display:"block", position:"absolute", top:"5%",left:"1%",height:"40px",width:"100px"}}>Users</button>
+
+        {!openedUserTab && (
+            <div className="position-fixed top-0 h-100 text-white bg-dark" style={{width:"250px",left:"0%"}}>
+                <button type='button' className='btn btn-light btn-block w-100 mt-3' onClick={()=>setOpenedUserTab(false)}>Close</button>
+
+                <div className='w-100 mt-5  pt-2'>
+                {
+                    users.map((usr,index)=>
+                        <p key={index*999} className='my-2 w-100'>{usr.name}
+                        {usr && usr.userId === user.userId && (<span className='text-primary'> (You)</span>
+                        )}
+                        </p>
+                )}
+                </div>
+            </div>
+        )}
+
         <div className="col-12 col-md-8 offset-md-2 align-items-center justify-content-center d-flex flex-column">
-            <h2 className="text-center mt-4 pt-4 py-4">Real Time White Board <span className="text-primary">[Users Online : 0]</span></h2>
+            <h2 className="text-center mt-4 pt-4 py-4">Real Time White Board <span className="text-primary">[Users Online : {users.length}]</span></h2>
 
             {
                 user?.presenter &&(

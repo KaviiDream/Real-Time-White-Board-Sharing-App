@@ -6,6 +6,8 @@ const {Server} = require("socket.io")
 
 const io = new Server (server)
 
+const { addUser } = require ("./utils/users.js")
+
 //routes
 app.get("/",(req,res)=>{
     res.send("This is MERN Real-Time Whire Board By Kavindu")
@@ -19,7 +21,9 @@ io.on("connection",(socket)=>{
         const {name, userId, roomId, host, presenter} = data;
         roomIdGlobal = roomId;
         socket.join(roomId);
-        socket.emit("userIsJoined", {success:true})
+        const users = addUser(data)
+        socket.emit("userIsJoined", {success:true, users });
+        socket.broadcast.to(roomId).emit("allUsers",users);
         socket.broadcast.to(roomId).emit("whiteBoardDataResponse", {imageURL: imageURLGlobal});
     })
 
