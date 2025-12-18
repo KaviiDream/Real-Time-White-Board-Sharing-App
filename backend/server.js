@@ -12,12 +12,20 @@ app.get("/",(req,res)=>{
     }
 )
 
+let roomIdGlobal,imageURLGlobal;
 
 io.on("connection",(socket)=>{
     socket.on("joinRoom",(data)=>{
         const {name, userId, roomId, host, presenter} = data;
+        roomIdGlobal = roomId;
         socket.join(roomId);
         socket.emit("userIsJoined", {success:true})
+        socket.broadcast.to(roomId).emit("whiteBoardDataResponse", {imageURL: imageURLGlobal});
+    })
+
+    socket.on("whiteboardData",(data)=>{
+        imageURLGlobal = data;
+        socket.broadcast.to(roomIdGlobal).emit("whiteBoardDataResponse", {imageURL: data});
     })
 })
 

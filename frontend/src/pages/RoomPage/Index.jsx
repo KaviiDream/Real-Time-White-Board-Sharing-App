@@ -3,7 +3,7 @@ import "./index.css"
 import { useState,useRef } from 'react';
 import WhiteBoard from '../../component/Whiteboard/Index';
 
-const RoomPage = () => {
+const RoomPage = ({user,socket}) => {
 
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
@@ -36,7 +36,10 @@ const RoomPage = () => {
     <div className="row">
         <div className="col-12 col-md-8 offset-md-2 align-items-center justify-content-center d-flex flex-column">
             <h2 className="text-center mt-4 pt-4 py-4">Real Time White Board <span className="text-primary">[Users Online : 0]</span></h2>
-            <div className="col-md-9 mt-4 mb-5 d-flex align-items-center justify-content-around border rounded p-3 canvas-container gap-2 mx-auto mb-3">
+
+            {
+                user?.presenter &&(
+                    <div className="col-md-9 mt-4 mb-5 d-flex align-items-center justify-content-around border rounded p-3 canvas-container gap-2 mx-auto mb-3">
                 <div className="d-flex col-md-4 justify-content-between gap-4">
 
                     <div className="d-flex gap-1">
@@ -71,14 +74,19 @@ const RoomPage = () => {
                     <button className="btn btn-danger mt-1" onClick={handleClearCanvas}>Clear Canvas</button>
                 </div>
 
-            </div>
+                    </div>
+
+                )
+            }
+
+            
 
         </div>
 
         <div className="col-md-10 mx-auto mt-4 canvas-box">
             <WhiteBoard canvasRef={canvasRef} ctxRef={ctxRef} 
             elements={elements} setElements={setElements}
-            color={color} tool={tool} />
+            color={color} tool={tool} user={user} socket={socket}/>
         </div>
     </div>
   )
