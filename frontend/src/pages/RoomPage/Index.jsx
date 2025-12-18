@@ -35,11 +35,12 @@ const RoomPage = ({user,socket, users}) => {
 
   return (
     <div className="row">
-        <button type='button' className='btn btn-dark' style={{display:"block", position:"absolute", top:"5%",left:"1%",height:"40px",width:"100px"}}>Users</button>
+        <button type='button' className='btn btn-dark'
+        style={{display:"block", position:"absolute", top:"5%",left:"1%",height:"40px",width:"100px"}} onClick={()=> setOpenedUserTab(true)}>Users</button>
 
-        {!openedUserTab && (
+        {openedUserTab && (
             <div className="position-fixed top-0 h-100 text-white bg-dark" style={{width:"250px",left:"0%"}}>
-                <button type='button' className='btn btn-light btn-block w-100 mt-3' onClick={()=>setOpenedUserTab(false)}>Close</button>
+                <button type='button' className='btn btn-light btn-block w-100 mt-5' onClick={()=>setOpenedUserTab(false)}>Close</button>
 
                 <div className='w-100 mt-5  pt-2'>
                 {
