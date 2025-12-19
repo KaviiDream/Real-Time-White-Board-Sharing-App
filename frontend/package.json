@@ -13,6 +13,7 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-router-dom": "^7.10.1",
+    "react-toastify": "^11.0.5",
     "roughjs": "^4.6.6",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1"

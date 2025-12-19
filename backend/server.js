@@ -6,7 +6,7 @@ const {Server} = require("socket.io")
 
 const io = new Server (server)
 
-const { addUser } = require ("./utils/users.js")
+const { addUser, removeUser, getAllUsersInRoom } = require ("./utils/users.js")
 
 //routes
 app.get("/",(req,res)=>{
@@ -21,8 +21,9 @@ io.on("connection",(socket)=>{
         const {name, userId, roomId, host, presenter} = data;
         roomIdGlobal = roomId;
         socket.join(roomId);
-        const users = addUser(data)
+        const users = addUser({name, userId, roomId, host, presenter, socketId: socket.id});
         socket.emit("userIsJoined", {success:true, users });
+        socket.broadcast.to(roomId).emit("userIsJoinedMessage", name);
         socket.broadcast.to(roomId).emit("allUsers",users);
         socket.broadcast.to(roomId).emit("whiteBoardDataResponse", {imageURL: imageURLGlobal});
     })
@@ -30,6 +31,14 @@ io.on("connection",(socket)=>{
     socket.on("whiteboardData",(data)=>{
         imageURLGlobal = data;
         socket.broadcast.to(roomIdGlobal).emit("whiteBoardDataResponse", {imageURL: data});
+    })
+    socket.on("disconnect",()=>{
+        const user = removeUser(socket.id);
+        if(user){
+            const users = getAllUsersInRoom(user.roomId);
+            socket.broadcast.to(user.roomId).emit("userLeftMessage", user);
+            io.to(user.roomId).emit("allUsers", users);
+        }
     })
 })
 
