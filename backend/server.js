@@ -6,7 +6,7 @@ const {Server} = require("socket.io")
 
 const io = new Server (server)
 
-const { addUser, removeUser, getAllUsersInRoom } = require ("./utils/users.js")
+const { addUser, removeUser, getAllUsersInRoom, getUser } = require ("./utils/users.js")
 
 //routes
 app.get("/",(req,res)=>{
@@ -15,6 +15,7 @@ app.get("/",(req,res)=>{
 )
 
 let roomIdGlobal,imageURLGlobal;
+const roomMessages = {};
 
 io.on("connection",(socket)=>{
     socket.on("joinRoom",(data)=>{
@@ -26,12 +27,34 @@ io.on("connection",(socket)=>{
         socket.broadcast.to(roomId).emit("userIsJoinedMessage", name);
         socket.broadcast.to(roomId).emit("allUsers",users);
         socket.broadcast.to(roomId).emit("whiteBoardDataResponse", {imageURL: imageURLGlobal});
+        socket.emit("chatHistory", roomMessages[roomId] || []);
     })
 
     socket.on("whiteboardData",(data)=>{
         imageURLGlobal = data;
         socket.broadcast.to(roomIdGlobal).emit("whiteBoardDataResponse", {imageURL: data});
     })
+
+    socket.on("sendMessage",({roomId, userId, message})=>{
+        const text = (message || "").trim();
+        if(!roomId || !text){
+            return;
+        }
+        const author = getUser(userId) || {};
+        const payload = {
+            userId: author.userId || userId,
+            name: author.name || "Anonymous",
+            message: text,
+            timestamp: new Date().toISOString()
+        };
+        if(!roomMessages[roomId]){
+            roomMessages[roomId] = [];
+        }
+        roomMessages[roomId].push(payload);
+        roomMessages[roomId] = roomMessages[roomId].slice(-100);
+        io.to(roomId).emit("newMessage", payload);
+    })
+
     socket.on("disconnect",()=>{
         const user = removeUser(socket.id);
         if(user){
