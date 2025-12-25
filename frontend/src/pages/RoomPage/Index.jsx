@@ -179,7 +179,7 @@ const RoomPage = ({user,socket, users}) => {
             <>
             <div className="chat-log" role="log" aria-live="polite">
                 {messages.length === 0 && (
-                    <p className="chat-empty text-muted ">Start the conversation by saying hi 👋</p>
+                    <p className="chat-empty">Start the conversation by saying hi 👋</p>
                 )}
                 {messages.map((msg)=> (
                     <div
