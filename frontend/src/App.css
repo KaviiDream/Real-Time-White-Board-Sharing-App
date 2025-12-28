@@ -24,7 +24,7 @@
 }
 
 .hero h1 {
-	font-size: clamp(2.5rem, 5vw, 3.75rem);
+	font-size: clamp(2.5rem, 6vw, 3.75rem);
 	margin-bottom: 1rem;
 	color: #0a1647;
 }
