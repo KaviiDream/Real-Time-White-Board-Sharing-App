@@ -28,7 +28,7 @@ const JoinRoomForm = ({uuid,socket,setUser})=>{
         <form className="form" onSubmit={handleJoinRoom}>
             <div className="form-group">
                 <label>Your name</label>
-                <input type="text" className="form-control" placeholder="Alex Doe" value={name} onChange={(e)=>setName(e.target.value)} required />
+                <input type="text" className="form-control" placeholder="Enter Your Name" value={name} onChange={(e)=>setName(e.target.value)} required />
             </div>
             <div className="form-group">
                 <label>Room code</label>

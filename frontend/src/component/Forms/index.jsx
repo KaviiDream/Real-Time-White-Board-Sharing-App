@@ -11,9 +11,7 @@ const Forms = ({ uuid, socket, setUser }) => {
                     <p className="kicker">Real-time workspace</p>
                     <h1>Host, share, and co-create on a clean white canvas.</h1>
                     <p className="subhead">Spin up a room in seconds, invite collaborators, chat live, and sketch together with zero friction.</p>
-                    <div className="cta-row">
-                        <button className="cta-button" onClick={() => document.getElementById('forms')?.scrollIntoView({ behavior: 'smooth' })}>Start a room</button>
-                    </div>
+                   
                 </section>
 
                 <section className="forms-stack" id="forms">

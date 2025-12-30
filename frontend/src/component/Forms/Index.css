@@ -37,7 +37,7 @@
 
 .input-group {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     gap: 0.5rem;
     align-items: stretch;
 }
@@ -55,7 +55,8 @@
 .input-group .btn { width: auto; }
 
 .btn-primary,
-.btn-outline-danger {
+.btn-outline-danger,
+.btn-outline-secondary {
     min-height: 48px;
 }
 
@@ -74,5 +75,15 @@
 }
 
 .btn-outline-danger:hover { background: #fff6f6; }
+
+.btn-outline-secondary {
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    color: #1e293b;
+}
+
+.btn-outline-secondary:hover {
+    background: #f5f8ff;
+}
 
 .btn-block { width: 100%; }
