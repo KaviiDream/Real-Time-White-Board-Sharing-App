@@ -85,130 +85,122 @@ const RoomPage = ({user,socket, users}) => {
 
 
   return (
-    <div className="row">
-        <button type='button' className='btn btn-dark'
-        style={{display:"block", position:"absolute", top:"5%",left:"1%",height:"40px",width:"100px"}} onClick={()=> setOpenedUserTab(true)}>Users</button>
-
-        {openedUserTab && (
-            <div className="position-fixed top-0 h-100 text-white bg-dark" style={{width:"250px",left:"0%"}}>
-                <button type='button' className='btn btn-light btn-block w-100 mt-5' onClick={()=>setOpenedUserTab(false)}>Close</button>
-
-                <div className='w-100 mt-5  pt-2'>
-                {
-                    users.map((usr,index)=>
-                        <p key={index*999} className='my-2 w-100'>{usr.name}
-                        {usr && usr.userId === user.userId && (<span className='text-primary'> (You)</span>
-                        )}
-                        </p>
-                )}
-                </div>
+    <div className="room-layout">
+        <header className="room-topbar">
+            <h3 className="room-title">Real-Time Whiteboard</h3>
+            <div className="room-actions">
+                <span className="badge-soft">{users.length} online</span>
+                <button className="ghost-btn" onClick={()=>setOpenedUserTab(true)}>Team</button>
             </div>
-        )}
+        </header>
 
-        <div className="col-12 col-md-8 offset-md-2 align-items-center justify-content-center d-flex flex-column">
-            <h2 className="text-center mt-4 pt-4 py-4">Real Time White Board <span className="text-primary">[Users Online : {users.length}]</span></h2>
-
-            {
-                user?.presenter &&(
-                    <div className="col-md-9 mt-4 mb-5 d-flex align-items-center justify-content-around border rounded p-3 canvas-container gap-2 mx-auto mb-3">
-                <div className="d-flex col-md-4 justify-content-between gap-4">
-
-                    <div className="d-flex gap-1">
-                        <label htmlFor="pencil">Pencil</label>
-                        <input type='radio' name="tool" value="pencil" id="pencil" checked={tool === "pencil"} onChange={(e)=>setTool(e.target.value)}/>
-                    </div>
-                    <div className="d-flex gap-1">
-                        <label htmlFor="line">Line</label>
-                        <input type='radio' name="tool" value="line" id="line" checked={tool === "line"} onChange={(e)=>setTool(e.target.value)}/>
-                    </div>
-                    <div className="d-flex gap-1">
-                        <label htmlFor="rect">Rectangle</label>
-                        <input type='radio' name="tool" value="rect" id="rect" checked={tool === "rect"} onChange={(e)=>setTool(e.target.value)}/>
-                    </div>
-
-                </div>
-
-                <div className="col-md-4">
-                    <div className="d-flex flex-column align-items-center justify-content-center">
-                        <label htmlFor="color">Select Color</label>
-                        <input type="color" id="color" name="color" className="mt-1" value={color} onChange={(e)=>setColor(e.target.value)}/>
-                    </div>
-                </div>
-
-                <div className="col-md-3 d-flex gap-2">
-                    <button className="btn btn-primary mt-1" disabled={elements.length === 0} onClick={()=> undo()}>Undo</button>
-                    <button className="btn btn-outline-primary mt-1" disabled={history.length < 1} onClick={() => redo()}>Redo</button>
-
-                </div>
-
-                <div className="col-md-2 d-flex gap-2 ml-6">
-                    <button className="btn btn-danger mt-1" onClick={handleClearCanvas}>Clear Canvas</button>
-                </div>
-
-                    </div>
-
-                )
-            }
-
-            
-
-        </div>
-
-        <div className="col-md-10 mx-auto mt-4 canvas-box">
-            <WhiteBoard canvasRef={canvasRef} ctxRef={ctxRef} 
-            elements={elements} setElements={setElements}
-            color={color} tool={tool} user={user} socket={socket}/>
-        </div>
-
-        <div className={`col-md-10 mx-auto mt-4 chat-shell ${isChatOpen ? "chat-shell--open" : "chat-shell--closed"}`}>
-            <div className="chat-header d-flex justify-content-between align-items-center">
+        <div className="room-body">
+            <aside className="utility-panel">
                 <div>
-                    <p className="chat-kicker">Live team chat</p>
-                    <h3 className="chat-title">Room Chat</h3>
-                </div>
-                <button
-                    type="button"
-                    className="btn btn-outline-secondary chat-toggle"
-                    onClick={() => setIsChatOpen((prev) => !prev)}
-                >
-                    {isChatOpen ? "Hide" : "Open"}
-                </button>
-            </div>
-
-            {isChatOpen && (
-            <>
-            <div className="chat-log" role="log" aria-live="polite">
-                {messages.length === 0 && (
-                    <p className="chat-empty">Start the conversation 👋</p>
-                )}
-                {messages.map((msg)=> (
-                    <div
-                        key={`${msg.timestamp}-${msg.userId}-${msg.message}`}
-                        className={`chat-message ${msg.userId === user?.userId ? "chat-message--self" : ""}`}
-                    >
-                        <div className="chat-meta">
-                            <span className="chat-author">{msg.name || "Anonymous"}</span>
-                            <span className="chat-time">{formatTimestamp(msg.timestamp)}</span>
-                        </div>
-                        <p className="chat-text">{msg.message}</p>
+                    <p className="panel-title">Tools</p>
+                    <div className="tool-list">
+                        <label className="tool-option" htmlFor="pencil">
+                            <input type='radio' name="tool" value="pencil" id="pencil" checked={tool === "pencil"} onChange={(e)=>setTool(e.target.value)}/>
+                            Pencil
+                        </label>
+                        <label className="tool-option" htmlFor="line">
+                            <input type='radio' name="tool" value="line" id="line" checked={tool === "line"} onChange={(e)=>setTool(e.target.value)}/>
+                            Line
+                        </label>
+                        <label className="tool-option" htmlFor="rect">
+                            <input type='radio' name="tool" value="rect" id="rect" checked={tool === "rect"} onChange={(e)=>setTool(e.target.value)}/>
+                            Rectangle
+                        </label>
                     </div>
-                ))}
-                <div ref={chatEndRef} />
+                </div>
+
+                <div className="color-picker">
+                    <p className="panel-title">Color</p>
+                    <input type="color" id="color" name="color" value={color} onChange={(e)=>setColor(e.target.value)}/>
+                </div>
+
+                <div>
+                    <p className="panel-title">Actions</p>
+                    <div className="action-buttons">
+                        <button className="action-btn" disabled={elements.length === 0} onClick={()=> undo()}>Undo</button>
+                        <button className="action-btn" disabled={history.length < 1} onClick={() => redo()}>Redo</button>
+                        <button className="action-btn danger" onClick={handleClearCanvas}>Clear</button>
+                    </div>
+                </div>
+            </aside>
+
+            <main className="canvas-area">
+                <div className="canvas-frame">
+                    <WhiteBoard canvasRef={canvasRef} ctxRef={ctxRef} 
+                    elements={elements} setElements={setElements}
+                    color={color} tool={tool} user={user} socket={socket}/>
+                </div>
+            </main>
+
+            <aside className="chat-panel">
+                <div className="chat-header">
+                    <div>
+                        <p className="chat-kicker">Live chat</p>
+                        <h4 className="chat-title">Room chat</h4>
+                    </div>
+                    <button
+                        type="button"
+                        className="chat-toggle"
+                        onClick={() => setIsChatOpen((prev) => !prev)}
+                    >
+                        {isChatOpen ? "Hide" : "Show"}
+                    </button>
+                </div>
+
+                {isChatOpen && (
+                <>
+                <div className="chat-log" role="log" aria-live="polite">
+                    {messages.length === 0 && (
+                        <p className="chat-empty">Start the conversation 👋</p>
+                    )}
+                    {messages.map((msg)=> (
+                        <div
+                            key={`${msg.timestamp}-${msg.userId}-${msg.message}`}
+                            className={`chat-message ${msg.userId === user?.userId ? "chat-message--self" : ""}`}
+                        >
+                            <div className="chat-meta">
+                                <span className="chat-author">{msg.name || "Anonymous"}</span>
+                                <span className="chat-time">{formatTimestamp(msg.timestamp)}</span>
+                            </div>
+                            <p className="chat-text">{msg.message}</p>
+                        </div>
+                    ))}
+                    <div ref={chatEndRef} />
+                </div>
+                <form className="chat-form" onSubmit={handleSendMessage}>
+                    <input
+                        type="text"
+                        className="chat-input"
+                        placeholder={user ? "Type your message" : "Join the room to chat"}
+                        value={messageText}
+                        onChange={(e)=>setMessageText(e.target.value)}
+                        disabled={!user}
+                    />
+                    <button type="submit" className="btn btn-primary" disabled={!messageText.trim() || !user}>
+                        Send
+                    </button>
+                </form>
+                </>) }
+            </aside>
+        </div>
+
+        <div className={`users-drawer ${openedUserTab ? "open" : ""}`}>
+            <div className="room-actions" style={{justifyContent:"space-between"}}>
+                <h4 style={{margin:0}}>Team</h4>
+                <button className="ghost-btn" onClick={()=>setOpenedUserTab(false)}>Close</button>
             </div>
-            <form className="chat-form" onSubmit={handleSendMessage}>
-                <input
-                    type="text"
-                    className="form-control chat-input"
-                    placeholder={user ? "Type your message" : "Join the room to chat"}
-                    value={messageText}
-                    onChange={(e)=>setMessageText(e.target.value)}
-                    disabled={!user}
-                />
-                <button type="submit" className="btn btn-primary" disabled={!messageText.trim() || !user}>
-                    Send
-                </button>
-            </form>
-            </>) }
+            {users.map((usr,index)=>(
+                <div key={index*999} className="user-item">
+                    <div className="user-avatar">{usr.name.charAt(0).toUpperCase()}</div>
+                    <div className="user-name">{usr.name}{usr && usr.userId === user.userId && (<span className="user-self"> (You)</span>)}
+                    </div>
+                </div>
+            ))}
         </div>
     </div>
   )

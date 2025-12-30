@@ -71,16 +71,15 @@ function App() {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     }
 
-  return (
-    <div className="container">
-        <ToastContainer />
-    <Routes>
-      <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser} />} />
-      <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users} />} />
-    </Routes>
-    
-    </div>
-  );
+    return (
+        <>
+            <ToastContainer position="top-right" />
+            <Routes>
+                <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser} />} />
+                <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users} />} />
+            </Routes>
+        </>
+    );
 }
 
 export default App;

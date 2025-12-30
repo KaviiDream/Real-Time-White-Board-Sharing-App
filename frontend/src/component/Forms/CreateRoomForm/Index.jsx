@@ -25,21 +25,19 @@ const CreateRoomForm = ({uuid, socket, setUser})=>{
     }
 
     return(
-        <form className="form col-md-12 mt-5">
+        <form className="form" onSubmit={handleCreateRoom}>
             <div className="form-group">
-                <input type="text" className="form-controll my-2" placeholder="Enter Your Name" value={name} onChange={(e)=>setName(e.target.value)} />
+                <label>Your name</label>
+                <input type="text" className="form-control" placeholder="Alex Doe" value={name} onChange={(e)=>setName(e.target.value)} required />
             </div>
-            <div className="form-group border">
-                <div className="input-group d-flex align-items-center justify-content-center">
-                    <input type="text" value={roomId} className="form-controll my-2 border-0" placeholder="Generate Room Code" disabled/>
-
-                    <div className="input-group-append d-flex gap-1 py-2">
-                        <button className="btn btn-primary btn-sm my-2 me-1" type="button" onClick={()=>setRoomId(uuid())}>Generate</button>
-                        <button className="btn btn-outline-danger btn-sm my-2 me-1" type="button">Copy</button>
-                    </div>
+            <div className="form-group">
+                <label>Room code</label>
+                <div className="input-group">
+                    <input type="text" value={roomId} className="form-control" placeholder="Generate room code" disabled/>
+                    <button className="btn btn-primary" type="button" onClick={()=>setRoomId(uuid())}>Generate</button>
                 </div>
             </div>
-            <button type="submit"onClick={handleCreateRoom} className="mt-4 btn-primary btn-block form-control">Create Room</button>
+            <button type="submit" className="btn btn-primary btn-block">Create & enter</button>
         </form>
     )
 

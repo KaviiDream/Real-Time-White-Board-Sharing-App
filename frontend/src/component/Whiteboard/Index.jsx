@@ -1,6 +1,7 @@
 import React from 'react'
 import rough from "roughjs"
 import { useEffect,useState, useLayoutEffect } from 'react'
+import "./Index.css"
 
 const roughGenerator = rough.generator();
 
@@ -26,13 +27,9 @@ const WhiteBoard = ({
 
     if(!user?.presenter){
     return (
-        <div
-        
-        className="border border-dark border-3 h-100 w-100 overflow-hidden">
-
-            <img src={img} alt="Real time white board image shared by presenter" style={{height: window.innerHeight*2, width: "285%"}}/>
-
-    </div>
+        <div className="whiteboard-view-only">
+            <img src={img} alt="Real time white board image shared by presenter" />
+        </div>
     )
   }
 
@@ -41,20 +38,23 @@ const WhiteBoard = ({
     
 
 
-  useEffect(()=>{
+    useEffect(()=>{
 
-    const canvas = canvasRef.current;
-    canvas.height = window.innerHeight * 2;
-    canvas.width = window.innerWidth * 2;
-    const ctx = canvas.getContext("2d");
+        const canvas = canvasRef.current;
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
 
-    ctx.strokeStyle = color
-    ctx.lineWidth = 2
-    ctx.lineCap = "round"
+        ctx.strokeStyle = color
+        ctx.lineWidth = 2
+        ctx.lineCap = "round"
 
-    ctxRef.current = ctx;
+        ctxRef.current = ctx;
 
-  },[]);
+    },[]);
 
 
 
@@ -196,19 +196,19 @@ const WhiteBoard = ({
 
   
 
-  return (
+    return (
 
-    <div
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        className="border border-dark border-3 h-100 w-100 overflow-hidden">
+        <div
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                className="whiteboard-shell">
 
-   <canvas ref={canvasRef}/>
+     <canvas ref={canvasRef}/>
 
-    </div>
+        </div>
     
-  )
+    )
 
 }
 
