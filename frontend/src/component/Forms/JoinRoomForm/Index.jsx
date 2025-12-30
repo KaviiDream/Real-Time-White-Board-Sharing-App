@@ -25,14 +25,16 @@ const JoinRoomForm = ({uuid,socket,setUser})=>{
     }
 
     return(
-        <form className="form col-md-12 mt-5">
+        <form className="form col-md-12 mt-5" onSubmit={handleJoinRoom}>
             <div className="form-group">
-                <input type="text" className="form-controll my-2" placeholder="Enter Your Name" value={name} onChange={(e)=>setName(e.target.value)}    />
+                <label>Your Name</label>
+                <input type="text" className="form-control" placeholder="Enter your name" value={name} onChange={(e)=>setName(e.target.value)} required />
             </div>
             <div className="form-group">
-                    <input type="text" className="form-controll my-2" placeholder="Enter Room Code" value={roomId} onChange={(e)=>setRoomId(e.target.value)} />
+                <label>Room Code</label>
+                <input type="text" className="form-control" placeholder="Enter the room code" value={roomId} onChange={(e)=>setRoomId(e.target.value)} required />
             </div>
-            <button type="submit" className="mt-4 btn-primary btn-block form-control" onClick={handleJoinRoom}>Join Room</button>
+            <button type="submit" className="btn btn-primary w-100 mt-4" style={{fontWeight: "600"}}>Join Room</button>
         </form>
     )
 
