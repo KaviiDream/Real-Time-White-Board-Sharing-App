@@ -25,19 +25,21 @@ const CreateRoomForm = ({uuid, socket, setUser})=>{
     }
 
     return(
-        <form className="form col-md-12 mt-5" onSubmit={handleCreateRoom}>
+        <form className="form col-md-12 mt-5">
             <div className="form-group">
-                <label>Your Name</label>
-                <input type="text" className="form-control" placeholder="Enter your name" value={name} onChange={(e)=>setName(e.target.value)} required />
+                <input type="text" className="form-controll my-2" placeholder="Enter Your Name" value={name} onChange={(e)=>setName(e.target.value)} />
             </div>
-            <div className="form-group">
-                <label>Room Code</label>
-                <div style={{display: "flex", gap: "0.75rem", alignItems: "center"}}>
-                    <input type="text" value={roomId} className="form-control" placeholder="Generate Room Code" disabled/>
-                    <button type="button" className="btn btn-primary" onClick={()=>setRoomId(uuid())} style={{whiteSpace: "nowrap"}}>Generate</button>
+            <div className="form-group border">
+                <div className="input-group d-flex align-items-center justify-content-center">
+                    <input type="text" value={roomId} className="form-controll my-2 border-0" placeholder="Generate Room Code" disabled/>
+
+                    <div className="input-group-append d-flex gap-1 py-2">
+                        <button className="btn btn-primary btn-sm my-2 me-1" type="button" onClick={()=>setRoomId(uuid())}>Generate</button>
+                        <button className="btn btn-outline-danger btn-sm my-2 me-1" type="button">Copy</button>
+                    </div>
                 </div>
             </div>
-            <button type="submit" className="btn btn-primary w-100 mt-4" style={{fontWeight: "600"}}>Create & Join Room</button>
+            <button type="submit"onClick={handleCreateRoom} className="mt-4 btn-primary btn-block form-control">Create Room</button>
         </form>
     )
 

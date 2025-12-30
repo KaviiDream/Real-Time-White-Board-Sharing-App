@@ -1,7 +1,6 @@
 import React from 'react'
 import rough from "roughjs"
 import { useEffect,useState, useLayoutEffect } from 'react'
-import "./Index.css"
 
 const roughGenerator = rough.generator();
 
@@ -27,9 +26,13 @@ const WhiteBoard = ({
 
     if(!user?.presenter){
     return (
-        <div className="whiteboard-viewer">
+        <div
+        
+        className="border border-dark border-3 h-100 w-100 overflow-hidden">
+
             <img src={img} alt="Real time white board image shared by presenter" style={{height: window.innerHeight*2, width: "285%"}}/>
-        </div>
+
+    </div>
     )
   }
 
@@ -199,8 +202,13 @@ const WhiteBoard = ({
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        className="whiteboard-canvas"
-        style={{width: "100%", height: "100%"}}>
+        className="border border-dark border-3 h-100 w-100 overflow-hidden">
+
+   <canvas ref={canvasRef}/>
+
+    </div>
+    
+  )
 
 }
 

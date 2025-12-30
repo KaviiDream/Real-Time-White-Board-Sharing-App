@@ -86,91 +86,92 @@ const RoomPage = ({user,socket, users}) => {
 
   return (
     <div className="row">
-        {/* Users Sidebar */}
-        <div className={`users-sidebar ${openedUserTab ? 'open' : ''}`}>
-            <div className="users-sidebar-header">
-                <h3>Team Members</h3>
-                <button onClick={() => setOpenedUserTab(false)}>Close</button>
+        <button type='button' className='btn btn-dark'
+        style={{display:"block", position:"absolute", top:"5%",left:"1%",height:"40px",width:"100px"}} onClick={()=> setOpenedUserTab(true)}>Users</button>
+
+        {openedUserTab && (
+            <div className="position-fixed top-0 h-100 text-white bg-dark" style={{width:"250px",left:"0%"}}>
+                <button type='button' className='btn btn-light btn-block w-100 mt-5' onClick={()=>setOpenedUserTab(false)}>Close</button>
+
+                <div className='w-100 mt-5  pt-2'>
+                {
+                    users.map((usr,index)=>
+                        <p key={index*999} className='my-2 w-100'>{usr.name}
+                        {usr && usr.userId === user.userId && (<span className='text-primary'> (You)</span>
+                        )}
+                        </p>
+                )}
+                </div>
             </div>
-            <div className="users-list">
-                {users.map((usr, index) => (
-                    <div key={index * 999} className={`user-item ${usr.userId === user?.userId ? 'you' : ''}`}>
-                        <div className="user-avatar">{usr.name.charAt(0).toUpperCase()}</div>
-                        <span>
-                            {usr.name}
-                            {usr.userId === user?.userId && <span className="text-primary"> (You)</span>}
-                        </span>
+        )}
+
+        <div className="col-12 col-md-8 offset-md-2 align-items-center justify-content-center d-flex flex-column">
+            <h2 className="text-center mt-4 pt-4 py-4">Real Time White Board <span className="text-primary">[Users Online : {users.length}]</span></h2>
+
+            {
+                user?.presenter &&(
+                    <div className="col-md-9 mt-4 mb-5 d-flex align-items-center justify-content-around border rounded p-3 canvas-container gap-2 mx-auto mb-3">
+                <div className="d-flex col-md-4 justify-content-between gap-4">
+
+                    <div className="d-flex gap-1">
+                        <label htmlFor="pencil">Pencil</label>
+                        <input type='radio' name="tool" value="pencil" id="pencil" checked={tool === "pencil"} onChange={(e)=>setTool(e.target.value)}/>
                     </div>
-                ))}
-            </div>
-            <div className="users-count">{users.length} participant{users.length !== 1 ? 's' : ''}</div>
+                    <div className="d-flex gap-1">
+                        <label htmlFor="line">Line</label>
+                        <input type='radio' name="tool" value="line" id="line" checked={tool === "line"} onChange={(e)=>setTool(e.target.value)}/>
+                    </div>
+                    <div className="d-flex gap-1">
+                        <label htmlFor="rect">Rectangle</label>
+                        <input type='radio' name="tool" value="rect" id="rect" checked={tool === "rect"} onChange={(e)=>setTool(e.target.value)}/>
+                    </div>
+
+                </div>
+
+                <div className="col-md-4">
+                    <div className="d-flex flex-column align-items-center justify-content-center">
+                        <label htmlFor="color">Select Color</label>
+                        <input type="color" id="color" name="color" className="mt-1" value={color} onChange={(e)=>setColor(e.target.value)}/>
+                    </div>
+                </div>
+
+                <div className="col-md-3 d-flex gap-2">
+                    <button className="btn btn-primary mt-1" disabled={elements.length === 0} onClick={()=> undo()}>Undo</button>
+                    <button className="btn btn-outline-primary mt-1" disabled={history.length < 1} onClick={() => redo()}>Redo</button>
+
+                </div>
+
+                <div className="col-md-2 d-flex gap-2 ml-6">
+                    <button className="btn btn-danger mt-1" onClick={handleClearCanvas}>Clear Canvas</button>
+                </div>
+
+                    </div>
+
+                )
+            }
+
+            
+
         </div>
 
-        {/* Main Content */}
-        <div className="main-content">
-            {/* Header */}
-            <div className="room-header">
-                <h2 className="room-title">Real Time Whiteboard</h2>
-                <div className="room-info">
-                    <div className="user-count-badge">
-                        👥 {users.length} Online
-                    </div>
-                    <button className="toggle-users-btn" onClick={() => setOpenedUserTab(true)}>
-                        View Team
-                    </button>
-                </div>
-            </div>
+        <div className="col-md-10 mx-auto mt-4 canvas-box">
+            <WhiteBoard canvasRef={canvasRef} ctxRef={ctxRef} 
+            elements={elements} setElements={setElements}
+            color={color} tool={tool} user={user} socket={socket}/>
+        </div>
 
-            {/* Canvas Area */}
-            <div className="canvas-box">
-                <WhiteBoard canvasRef={canvasRef} ctxRef={ctxRef} 
-                elements={elements} setElements={setElements}
-                color={color} tool={tool} user={user} socket={socket}/>
-            </div>
-
-            {/* Control Toolbar */}
-            {user?.presenter && (
-                <div className="canvas-container">
-                    <div className="tool-group">
-                        <label htmlFor="pencil">
-                            <input type='radio' name="tool" value="pencil" id="pencil" checked={tool === "pencil"} onChange={(e) => setTool(e.target.value)} />
-                            ✏️ Pencil
-                        </label>
-                        <label htmlFor="line">
-                            <input type='radio' name="tool" value="line" id="line" checked={tool === "line"} onChange={(e) => setTool(e.target.value)} />
-                            📏 Line
-                        </label>
-                        <label htmlFor="rect">
-                            <input type='radio' name="tool" value="rect" id="rect" checked={tool === "rect"} onChange={(e) => setTool(e.target.value)} />
-                            ◻️ Rectangle
-                        </label>
-                    </div>
-
-                    <div className="tool-group color-picker">
-                        <label htmlFor="color">Color</label>
-                        <input type="color" id="color" name="color" value={color} onChange={(e) => setColor(e.target.value)} />
-                    </div>
-
-                    <div className="action-buttons">
-                        <button className="btn-tool primary" disabled={elements.length === 0} onClick={() => undo()}>↶ Undo</button>
-                        <button className="btn-tool secondary" disabled={history.length < 1} onClick={() => redo()}>↷ Redo</button>
-                        <button className="btn-tool danger" onClick={handleClearCanvas}>🗑️ Clear</button>
-                    </div>
-                </div>
-            )}
-
-        <div className={`chat-shell ${isChatOpen ? "chat-shell--open" : "chat-shell--closed"}`}>
-            <div className="chat-header">
+        <div className={`col-md-10 mx-auto mt-4 chat-shell ${isChatOpen ? "chat-shell--open" : "chat-shell--closed"}`}>
+            <div className="chat-header d-flex justify-content-between align-items-center">
                 <div>
-                    <p className="chat-kicker">💬 Chat</p>
+                    <p className="chat-kicker">Live team chat</p>
                     <h3 className="chat-title">Room Chat</h3>
                 </div>
                 <button
                     type="button"
-                    className="chat-toggle"
+                    className="btn btn-outline-secondary chat-toggle"
                     onClick={() => setIsChatOpen((prev) => !prev)}
                 >
-                    {isChatOpen ? "−" : "+"}
+                    {isChatOpen ? "Hide" : "Open"}
                 </button>
             </div>
 
@@ -209,9 +210,8 @@ const RoomPage = ({user,socket, users}) => {
             </form>
             </>) }
         </div>
-                </div>
-        </div>
-    )
+    </div>
+  )
 }
 
 export default RoomPage

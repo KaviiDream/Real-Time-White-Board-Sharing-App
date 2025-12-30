@@ -72,15 +72,14 @@ function App() {
     }
 
   return (
-    <>
-        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick draggable pauseOnHover />
-        <div className="app-shell">
-            <Routes>
-              <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser} />} />
-              <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users} />} />
-            </Routes>
-        </div>
-    </>
+    <div className="container">
+        <ToastContainer />
+    <Routes>
+      <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser} />} />
+      <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users} />} />
+    </Routes>
+    
+    </div>
   );
 }
 
