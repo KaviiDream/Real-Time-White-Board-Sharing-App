@@ -1,12 +1,19 @@
 const express = require("express")
-const app = express() 
+const app = express()
 
 const server = require("http").createServer(app)
-const {Server} = require("socket.io")
+const { Server } = require("socket.io")
 
-const io = new Server (server)
+const io = new Server(server, {
+    // Allow the Vite dev server (default 5173) to talk to Socket.IO
+    cors: {
+        origin: process.env.FRONTEND_ORIGIN || "http://localhost:5173",
+        methods: ["GET", "POST"],
+        credentials: true,
+    },
+})
 
-const { addUser, removeUser, getAllUsersInRoom, getUser } = require ("./utils/users.js")
+const { addUser, removeUser, getAllUsersInRoom, getUser } = require("./utils/users.js")
 
 //routes
 app.get("/",(req,res)=>{
@@ -14,25 +21,34 @@ app.get("/",(req,res)=>{
     }
 )
 
-let roomIdGlobal,imageURLGlobal;
-const roomMessages = {};
+// Track per-room data so multiple rooms don't clash
+const roomMessages = {}
+const roomImages = {}
 
 io.on("connection",(socket)=>{
-    socket.on("joinRoom",(data)=>{
-        const {name, userId, roomId, host, presenter} = data;
-        roomIdGlobal = roomId;
-        socket.join(roomId);
-        const users = addUser({name, userId, roomId, host, presenter, socketId: socket.id});
-        socket.emit("userIsJoined", {success:true, users });
-        socket.broadcast.to(roomId).emit("userIsJoinedMessage", name);
-        socket.broadcast.to(roomId).emit("allUsers",users);
-        socket.broadcast.to(roomId).emit("whiteBoardDataResponse", {imageURL: imageURLGlobal});
-        socket.emit("chatHistory", roomMessages[roomId] || []);
+    socket.on("joinRoom", (data) => {
+        const { name, userId, roomId, host, presenter } = data
+        socket.join(roomId)
+        const users = addUser({ name, userId, roomId, host, presenter, socketId: socket.id })
+        socket.emit("userIsJoined", { success: true, users })
+        socket.broadcast.to(roomId).emit("userIsJoinedMessage", name)
+        socket.broadcast.to(roomId).emit("allUsers", users)
+
+        // Send latest whiteboard snapshot for this room (if any)
+        const latestImage = roomImages[roomId]
+        if (latestImage) {
+            socket.emit("whiteBoardDataResponse", { imageURL: latestImage })
+        }
+
+        socket.emit("chatHistory", roomMessages[roomId] || [])
     })
 
-    socket.on("whiteboardData",(data)=>{
-        imageURLGlobal = data;
-        socket.broadcast.to(roomIdGlobal).emit("whiteBoardDataResponse", {imageURL: data});
+    socket.on("whiteboardData", ({ roomId, imageURL }) => {
+        if (!roomId || !imageURL) {
+            return
+        }
+        roomImages[roomId] = imageURL
+        socket.broadcast.to(roomId).emit("whiteBoardDataResponse", { imageURL })
     })
 
     socket.on("sendMessage",({roomId, userId, message})=>{
@@ -65,5 +81,5 @@ io.on("connection",(socket)=>{
     })
 })
 
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 4000
 server.listen(port,()=> console.log(`Server is running on port ${port}`))

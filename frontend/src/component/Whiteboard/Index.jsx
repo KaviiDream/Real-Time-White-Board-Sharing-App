@@ -20,10 +20,12 @@ const WhiteBoard = ({
     const [img,setImg] = useState(null);
 
    useEffect(()=>{
-    socket.on("whiteBoardDataResponse", (data)=>{
+    const handleWhiteboardData = (data)=>{
         setImg(data.imageURL);
-        })
-    },[]);
+    }
+    socket.on("whiteBoardDataResponse", handleWhiteboardData);
+    return () => socket.off("whiteBoardDataResponse", handleWhiteboardData);
+    },[socket]);
 
     if(!user?.presenter){
     return (
@@ -91,7 +93,7 @@ const WhiteBoard = ({
     })
 
     const canvasImage = canvasRef.current.toDataURL();
-    socket.emit("whiteboardData",canvasImage)
+    socket.emit("whiteboardData",{roomId: user?.roomId, imageURL: canvasImage})
 
     }
   },[elements]);
